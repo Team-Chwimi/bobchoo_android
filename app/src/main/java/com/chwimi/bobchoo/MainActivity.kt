@@ -6,25 +6,29 @@ import android.os.Bundle
 import android.webkit.GeolocationPermissions
 import android.webkit.WebChromeClient
 import android.webkit.WebView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var mWebView: WebView;
+    private lateinit var mWebView: WebView
+    private lateinit var mToast: Toast
+    private var backWait: Long = 0
 
     companion object {
-        private const val MY_PERMISSION_REQUEST_LOCATION: Int = 0;
+        private const val MY_PERMISSION_REQUEST_LOCATION: Int = 0
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         permissionCheck()
+        mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT)
     }
 
-    //위치정보 위한 정보
+    //위치정보 권한 확인
     private fun permissionCheck() {
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -52,7 +56,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initWebView() {
         mWebView = findViewById(R.id.webview)
-        mWebView.loadUrl("https://k6a303.p.ssafy.io")
+        mWebView.loadUrl("https://bobchoo.site")
 
         mWebView.settings.javaScriptEnabled = true
         mWebView.webChromeClient = object : WebChromeClient() {
@@ -64,6 +68,20 @@ class MainActivity : AppCompatActivity() {
                 callback?.invoke(origin, true, false)
             }
         }
+    }
+
+    override fun onBackPressed() {
+        if (mWebView.canGoBack())
+            mWebView.goBack()
+        else {
+            if (System.currentTimeMillis() - backWait >= 2000) {
+                backWait = System.currentTimeMillis()
+                mToast.setText("뒤로가기 버튼을 한 번 더 누르면 종료됩니다.")
+                mToast.show()
+            } else
+                super.onBackPressed()
+        }
+
     }
 
 
