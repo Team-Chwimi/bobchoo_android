@@ -66,15 +66,6 @@ class MainActivity : AppCompatActivity() {
                 callback?.invoke(origin, true, false)
             }
         }
-        mWebView.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(
-                view: WebView?,
-                request: WebResourceRequest?
-            ): Boolean {
-                view?.loadUrl(request?.url.toString())
-                return true
-            }
-        }
     }
 
     override fun onBackPressed() {
