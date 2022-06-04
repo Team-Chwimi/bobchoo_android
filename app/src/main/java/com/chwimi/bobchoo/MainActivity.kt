@@ -57,6 +57,9 @@ class MainActivity : AppCompatActivity() {
         mWebView.loadUrl("https://bobchoo.site")
 
         mWebView.settings.javaScriptEnabled = true
+        mWebView.settings.loadWithOverviewMode = true
+        mWebView.settings.useWideViewPort = true
+
         mWebView.webChromeClient = object : WebChromeClient() {
             override fun onGeolocationPermissionsShowPrompt(
                 origin: String?,
